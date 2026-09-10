@@ -44,7 +44,7 @@ export default function ProtectedChatPage() {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    router.push("/login");
+    router.push("/");
   };
 
   const handleSendMessage = (data: {
