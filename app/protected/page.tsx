@@ -11,23 +11,14 @@ export default function Home() {
       {/* Background Interactive PixelBlast */}
       <PixelBlastBackground />
 
-      {/* Foreground Navigation Bar */}
-      <div className="relative z-10 w-full flex flex-col items-center">
-        <nav className="w-full flex justify-center border-b border-zinc-800/50 h-16 bg-black/40 backdrop-blur-md">
-          <div className="w-full max-w-7xl flex justify-between items-center p-3 px-5 text-sm text-zinc-100">
-            <span className="font-semibold text-lg">AI Assistant</span>
-            {!hasEnvVars ? (
-              <EnvVarWarning />
-            ) : (
-              <Suspense>
-                <AuthButton />
-              </Suspense>
-            )}
-          </div>
-        </nav>
-      </div>
+      {/* Hidden/Fallback Auth Verification */}
+      {!hasEnvVars && (
+        <div className="relative z-20 w-full p-4 flex justify-center">
+          <EnvVarWarning />
+        </div>
+      )}
 
-      {/* AI Animated Chat Interface */}
+      {/* Main AI Chat Component */}
       <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center">
         <ChatPage />
       </div>
