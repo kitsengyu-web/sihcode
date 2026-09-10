@@ -22,6 +22,20 @@ export default function Home() {
     <main className="relative min-h-screen flex flex-col items-center overflow-hidden bg-black text-white">
       {/* Background Interactive PixelBlast */}
       <PixelBlastBackground />
+      <div
+ref={containerRef}
+style={{position: 'relative'}}
+>
+  <VariableProximity
+    label={'Hover me! And then star React Bits on GitHub, or else...'}
+    className={'variable-proximity-demo'}
+    fromFontVariationSettings="'wght' 400, 'opsz' 9"
+    toFontVariationSettings="'wght' 1000, 'opsz' 40"
+    containerRef={containerRef}
+    radius={100}
+    falloff="linear"
+  />
+</div>
 
       {/* Foreground Navigation Bar */}
       <div className="relative z-10 w-full flex flex-col items-center">
