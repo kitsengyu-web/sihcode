@@ -4,6 +4,7 @@ import { PixelBlastBackground } from "@/components/pixel-blast-wrapper";
 import { hasEnvVars } from "@/lib/utils";
 import { Suspense } from "react";
 import Link from "next/link";
+import VariableProximity from '@/components/headtxt';
 
 // 1. Define the logo component OUTSIDE the Home component
 const PramaanLogoIcon = () => (
