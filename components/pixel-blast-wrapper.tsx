@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 
-const PixelBlast = dynamic(() => import("./PixelBlast"), {
+const PixelBlast = dynamic(() => import("@/components/landground"), {
   ssr: false,
 });
 
