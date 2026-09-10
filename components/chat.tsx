@@ -142,96 +142,12 @@ const PastedContentCard: React.FC<PastedContentCardProps> = ({ content, onRemove
   );
 };
 
-// 3. Model Selector
-interface Model {
-  id: string;
-  name: string;
-  description: string;
-  badge?: string;
-}
-
-interface ModelSelectorProps {
-  models: Model[];
-  selectedModel: string;
-  onSelect: (modelId: string) => void;
-}
-
-const ModelSelector: React.FC<ModelSelectorProps> = ({ models, selectedModel, onSelect }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const currentModel = models.find((m) => m.id === selectedModel) || models[0];
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  return (
-    <div className="relative" ref={dropdownRef}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`inline-flex items-center justify-center relative shrink-0 transition duration-200 h-8 rounded-xl px-3 min-w-[4rem] active:scale-[0.98] whitespace-nowrap text-xs gap-1 ${
-          isOpen
-            ? "bg-zinc-700 text-white"
-            : "text-zinc-300 hover:text-white hover:bg-zinc-800"
-        }`}
-      >
-        <div className="inline-flex gap-[3px] text-[14px] leading-none items-baseline">
-          <span className="whitespace-nowrap select-none font-medium">{currentModel.name}</span>
-        </div>
-        <Icons.SelectArrow className={`w-4 h-4 opacity-75 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
-      </button>
-
-      {isOpen && (
-        <div className="absolute bottom-full right-0 mb-2 w-[260px] bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl overflow-hidden z-50 flex flex-col p-1.5 origin-bottom-right">
-          {models.map((model) => (
-            <button
-              key={model.id}
-              onClick={() => {
-                onSelect(model.id);
-                setIsOpen(false);
-              }}
-              className="w-full text-left px-3 py-2.5 rounded-xl flex items-start justify-between group transition-colors hover:bg-zinc-800"
-            >
-              <div className="flex flex-col gap-0.5">
-                <div className="flex items-center gap-2">
-                  <span className="text-[13px] font-semibold text-white">{model.name}</span>
-                  {model.badge && (
-                    <span
-                      className={`px-1.5 py-[1px] rounded-full text-[10px] font-medium border ${
-                        model.badge === "Upgrade"
-                          ? "border-blue-500/30 text-blue-400 bg-blue-500/10"
-                          : "border-zinc-700 text-zinc-400"
-                      }`}
-                    >
-                      {model.badge}
-                    </span>
-                  )}
-                </div>
-                <span className="text-[11px] text-zinc-400">{model.description}</span>
-              </div>
-              {selectedModel === model.id && <Icons.Check className="w-4 h-4 text-blue-400 mt-1" />}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-// 4. Main Input Component
+// 3. Main Input Component
 interface ClaudeChatInputProps {
   onSendMessage?: (data: {
     message: string;
     files: AttachedFile[];
     pastedContent: PastedContentItem[];
-    model: string;
     isThinkingEnabled: boolean;
   }) => void;
 }
@@ -241,17 +157,10 @@ export const ClaudeChatInput: React.FC<ClaudeChatInputProps> = ({ onSendMessage 
   const [files, setFiles] = useState<AttachedFile[]>([]);
   const [pastedContent, setPastedContent] = useState<PastedContentItem[]>([]);
   const [isDragging, setIsDragging] = useState(false);
-  const [selectedModel, setSelectedModel] = useState("sonnet-4.5");
   const [isThinkingEnabled, setIsThinkingEnabled] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const models = [
-    { id: "opus-4.5", name: "Opus 4.5", description: "Most capable for complex work" },
-    { id: "sonnet-4.5", name: "Sonnet 4.5", description: "Best for everyday tasks" },
-    { id: "haiku-4.5", name: "Haiku 4.5", description: "Fastest for quick answers" },
-  ];
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -326,7 +235,7 @@ export const ClaudeChatInput: React.FC<ClaudeChatInputProps> = ({ onSendMessage 
   const handleSend = () => {
     if (!message.trim() && files.length === 0 && pastedContent.length === 0) return;
     if (onSendMessage) {
-      onSendMessage({ message, files, pastedContent, model: selectedModel, isThinkingEnabled });
+      onSendMessage({ message, files, pastedContent, isThinkingEnabled });
     }
     setMessage("");
     setFiles([]);
@@ -406,8 +315,6 @@ export const ClaudeChatInput: React.FC<ClaudeChatInputProps> = ({ onSendMessage 
           </div>
 
           <div className="flex items-center gap-2">
-            <ModelSelector models={models} selectedModel={selectedModel} onSelect={setSelectedModel} />
-
             <button
               onClick={handleSend}
               disabled={!hasContent}
