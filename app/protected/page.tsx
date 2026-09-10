@@ -29,10 +29,8 @@ export default function ProtectedChatPage() {
     message: string;
     files: any[];
     pastedContent: any[];
-    model: string;
     isThinkingEnabled: boolean;
   }) => {
-    // Process or submit your message payload here
     console.log("Submitting payload:", data);
   };
 
