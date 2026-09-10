@@ -1,13 +1,11 @@
-
+import { Suspense } from "react";
+import Link from "next/link";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { PixelBlastBackground } from "@/components/pixel-blast-wrapper";
-import { hasEnvVars } from "@/lib/utils";
-import { Suspense } from "react";
-import Link from "next/link";
-import VariableProximity from '@/components/headtxt';
 import { HeroSection } from "@/components/hold";
-// 1. Define the logo component OUTSIDE the Home component
+import { hasEnvVars } from "@/lib/utils";
+
 const PramaanLogoIcon = () => (
   <svg
     viewBox="0 0 200 200"
@@ -18,33 +16,21 @@ const PramaanLogoIcon = () => (
   </svg>
 );
 
-export default function Home() {
+export default async function Home() {
   return (
     <main className="relative min-h-screen flex flex-col items-center overflow-hidden bg-black text-white">
       {/* Background Interactive PixelBlast */}
       <PixelBlastBackground />
-      <div
-ref={containerRef}
-style={{position: 'relative'}}
->
-  <VariableProximity
-    label={'Hover me! And then star React Bits on GitHub, or else...'}
-    className={'variable-proximity-demo'}
-    fromFontVariationSettings="'wght' 400, 'opsz' 9"
-    toFontVariationSettings="'wght' 1000, 'opsz' 40"
-    containerRef={containerRef}
-    radius={100}
-    falloff="linear"
-  />
-</div>
 
       {/* Foreground Navigation Bar */}
       <div className="relative z-10 w-full flex flex-col items-center">
         <nav className="w-full flex justify-center border-b border-zinc-800/50 h-16 bg-black/40 backdrop-blur-md">
           <div className="w-full max-w-7xl flex justify-between items-center p-3 px-4 sm:px-6 text-sm text-zinc-100">
-            
             {/* Left: Pramaan Logo */}
-            <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-90">
+            <Link
+              href="/"
+              className="flex items-center gap-2.5 transition-opacity hover:opacity-90"
+            >
               <div className="h-8 w-8 overflow-hidden rounded-xl bg-white p-1 flex items-center justify-center shrink-0">
                 <PramaanLogoIcon />
               </div>
@@ -63,10 +49,12 @@ style={{position: 'relative'}}
                 </Suspense>
               )}
             </div>
-
           </div>
         </nav>
       </div>
+
+      {/* Interactive Proximity Text */}
+      <HeroSection />
     </main>
   );
 }
