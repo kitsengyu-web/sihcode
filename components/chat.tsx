@@ -511,7 +511,7 @@ export default function ChatPage() {
 
 function TypingDots() {
     return (
-        <div className="flex items-center ml-1">
+        <div className="w-full min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center bg-transparent text-white p-4 sm:p-6 relative">
             {[1, 2, 3].map((dot) => (
                 <motion.div
                     key={dot}
