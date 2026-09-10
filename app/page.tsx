@@ -1,7 +1,7 @@
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { PixelBlastBackground } from "@/components/pixel-blast-wrapper";
-import ChatPage from "@/components/animated-ai-chat";
+import ChatPage from "@/components/chat";
 import { hasEnvVars } from "@/lib/utils";
 import { Suspense } from "react";
 
