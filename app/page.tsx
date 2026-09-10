@@ -20,7 +20,7 @@ export default function Home() {
             <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-90">
               <div className="h-8 w-8 overflow-hidden rounded-xl bg-white p-1 flex items-center justify-center shrink-0">
                 <img
-                  src="/pramaan_logo.png"
+                  src="@/components/pramaan_logo.png"
                   alt="Pramaan Logo"
                   className="h-full w-full object-contain"
                 />
