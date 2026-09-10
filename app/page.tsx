@@ -3,7 +3,7 @@ import { AuthButton } from "@/components/auth-button";
 import { PixelBlastBackground } from "@/components/pixel-blast-wrapper";
 import { hasEnvVars } from "@/lib/utils";
 import { Suspense } from "react";
-
+import Image from "next/image";
 export default function Home() {
   return (
     <main className="relative min-h-screen flex flex-col items-center overflow-hidden bg-black text-white">
