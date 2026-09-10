@@ -3,7 +3,6 @@ import { AuthButton } from "@/components/auth-button";
 import { PixelBlastBackground } from "@/components/pixel-blast-wrapper";
 import { hasEnvVars } from "@/lib/utils";
 import { Suspense } from "react";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -15,20 +14,18 @@ export default function Home() {
       {/* Foreground Navigation Bar */}
       <div className="relative z-10 w-full flex flex-col items-center">
         <nav className="w-full flex justify-center border-b border-zinc-800/50 h-16 bg-black/40 backdrop-blur-md">
-          <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm text-zinc-100">
+          <div className="w-full max-w-7xl flex justify-between items-center p-3 px-4 sm:px-6 text-sm text-zinc-100">
             
-            {/* Left: Pramaan Logo */}
+            {/* Left: Pramaan Logo (Positioned far left) */}
             <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-90">
-              <div className="relative h-8 w-8 overflow-hidden rounded-lg bg-white p-0.5">
-                <Image
-                  src="@/components/pramaan_logo.png"
+              <div className="h-8 w-8 overflow-hidden rounded-xl bg-white p-1 flex items-center justify-center shrink-0">
+                <img
+                  src="/pramaan_logo.png"
                   alt="Pramaan Logo"
-                  fill
-                  className="object-contain p-0.5"
-                  priority
+                  className="h-full w-full object-contain"
                 />
               </div>
-              <span className="text-base font-semibold tracking-tight text-white font-sans">
+              <span className="text-base font-bold tracking-tight text-white font-sans">
                 Pramaan
               </span>
             </Link>
