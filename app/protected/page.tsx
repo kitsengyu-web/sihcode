@@ -14,7 +14,7 @@ export default function Home() {
       {/* Foreground Navigation Bar */}
       <div className="relative z-10 w-full flex flex-col items-center">
         <nav className="w-full flex justify-center border-b border-zinc-800/50 h-16 bg-black/40 backdrop-blur-md">
-          <div className="w-full max-w-5xl flex justify-end items-center p-3 px-5 text-sm text-zinc-100">
+          <div className="w-full flex flex-col items-center justify-center bg-transparent text-white p-6 relative">
             {!hasEnvVars ? (
               <EnvVarWarning />
             ) : (
