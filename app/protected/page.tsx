@@ -20,7 +20,7 @@ export default function ProtectedChatPage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push("/login");
+        router.push("/");
       } else {
         setUser(user);
       }
