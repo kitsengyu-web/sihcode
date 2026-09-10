@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/utils/supabase/client"; // Adjust path to your Supabase client
-import { ClaudeChatInput } from "./chat";
+import { createClient } from "@/lib/supabase/client"; // Adjust path to your Supabase client
+import { ClaudeChatInput } from "@/components/chat";
 import { LogOut, User } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
