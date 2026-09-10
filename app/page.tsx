@@ -1,7 +1,6 @@
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { PixelBlastBackground } from "@/components/pixel-blast-wrapper";
-import ChatPage from "@/components/chat";
 import { hasEnvVars } from "@/lib/utils";
 import { Suspense } from "react";
 
@@ -24,11 +23,6 @@ export default function Home() {
             )}
           </div>
         </nav>
-      </div>
-
-      {/* AI Animated Chat Interface */}
-      <div className="relative z-10 w-full flex-1 flex flex-col justify-center items-center">
-        <ChatPage />
       </div>
     </main>
   );
