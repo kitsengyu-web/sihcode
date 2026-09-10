@@ -1,20 +1,62 @@
 "use client";
 
-import React from "react";
-import { useSession, signOut } from "next-auth/react";
-import { redirect } from "next/navigation";
-import { ClaudeChatInput } from "@/components/chat";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client"; // Adjust path to your Supabase client
+import { ClaudeChatInput } from "./chat";
 import { LogOut, User } from "lucide-react";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 export default function ProtectedChatPage() {
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect("/api/auth/signin");
-    },
-  });
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const supabase = createClient();
 
-  if (status === "loading") {
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        router.push("/login");
+      } else {
+        setUser(user);
+      }
+      setLoading(false);
+    };
+
+    getUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        router.push("/login");
+      } else {
+        setUser(session?.user ?? null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [router, supabase]);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
+  const handleSendMessage = (data: {
+    message: string;
+    files: any[];
+    pastedContent: any[];
+    isThinkingEnabled: boolean;
+  }) => {
+    console.log("Submitting payload with user ID:", user?.id, data);
+  };
+
+  if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#0d0d0e]">
         <div className="flex flex-col items-center gap-3">
@@ -25,18 +67,8 @@ export default function ProtectedChatPage() {
     );
   }
 
-  const handleSendMessage = (data: {
-    message: string;
-    files: any[];
-    pastedContent: any[];
-    isThinkingEnabled: boolean;
-  }) => {
-    console.log("Submitting payload:", data);
-  };
-
   return (
     <div className="flex min-h-screen flex-col bg-[#0d0d0e] text-zinc-100">
-      {/* Protected Header Navigation */}
       <header className="flex h-14 items-center justify-between border-b border-zinc-800 px-4 md:px-6">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-emerald-500" />
@@ -49,12 +81,12 @@ export default function ProtectedChatPage() {
           <div className="flex items-center gap-2 rounded-full bg-zinc-900 border border-zinc-800 px-3 py-1">
             <User className="h-3.5 w-3.5 text-zinc-400" />
             <span className="text-xs text-zinc-300 font-medium">
-              {session?.user?.email || session?.user?.name || "User"}
+              {user?.email || "User"}
             </span>
           </div>
 
           <button
-            onClick={() => signOut({ callbackUrl: "/api/auth/signin" })}
+            onClick={handleSignOut}
             className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-900 px-2.5 py-1.5 text-xs text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
             type="button"
           >
@@ -64,7 +96,6 @@ export default function ProtectedChatPage() {
         </div>
       </header>
 
-      {/* Main Container */}
       <main className="flex flex-1 flex-col items-center justify-center p-4 md:p-6">
         <div className="w-full max-w-4xl space-y-6">
           <div className="text-center space-y-1.5">
@@ -72,7 +103,7 @@ export default function ProtectedChatPage() {
               What would you like to explore today?
             </h1>
             <p className="text-xs text-zinc-400">
-              Select a model and attached context to begin.
+              Enter a prompt or upload content to begin.
             </p>
           </div>
 
