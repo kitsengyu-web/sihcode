@@ -1,4 +1,3 @@
-import { DeployButton } from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { Hero } from "@/components/hero";
@@ -7,7 +6,6 @@ import { ConnectSupabaseSteps } from "@/components/tutorial/connect-supabase-ste
 import { SignUpUserSteps } from "@/components/tutorial/sign-up-user-steps";
 import { PixelBlastBackground } from "@/components/pixel-blast-wrapper";
 import { hasEnvVars } from "@/lib/utils";
-import Link from "next/link";
 import { Suspense } from "react";
 
 export default function Home() {
@@ -20,13 +18,7 @@ export default function Home() {
       <div className="relative z-10 flex-1 w-full flex flex-col gap-20 items-center">
         {/* Navigation Bar */}
         <nav className="w-full flex justify-center border-b border-zinc-800 h-16 bg-black/80 backdrop-blur-md">
-          <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm text-zinc-100">
-            <div className="flex gap-5 items-center font-semibold">
-              <Link href={"/"}>Next.js Supabase Starter</Link>
-              <div className="flex items-center gap-2">
-                <DeployButton />
-              </div>
-            </div>
+          <div className="w-full max-w-5xl flex justify-end items-center p-3 px-5 text-sm text-zinc-100">
             {!hasEnvVars ? (
               <EnvVarWarning />
             ) : (
