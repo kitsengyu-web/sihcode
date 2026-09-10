@@ -266,16 +266,10 @@ export default function ChatPage() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col w-full items-center justify-center bg-[#0A0A0B] text-white p-6 relative overflow-hidden">
-            <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full filter blur-[128px] animate-pulse" />
-                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full filter blur-[128px] animate-pulse delay-700" />
-                <div className="absolute top-1/4 right-1/3 w-64 h-64 bg-fuchsia-500/10 rounded-full filter blur-[96px] animate-pulse delay-1000" />
-            </div>
-
+        <div className="w-full flex-1 flex flex-col items-center justify-center p-4 sm:p-8 relative">
             <div className="w-full max-w-2xl mx-auto relative">
                 <motion.div
-                    className="relative z-10 space-y-12"
+                    className="relative z-10 space-y-8 w-full"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
@@ -287,7 +281,7 @@ export default function ChatPage() {
                             transition={{ delay: 0.2, duration: 0.5 }}
                             className="inline-block"
                         >
-                            <h1 className="text-3xl font-medium tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white/90 to-white/40 pb-1">
+                            <h1 className="text-3xl sm:text-4xl font-medium tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white/90 to-white/40 pb-1">
                                 How can I help today?
                             </h1>
                             <motion.div
@@ -308,7 +302,7 @@ export default function ChatPage() {
                     </div>
 
                     <motion.div
-                        className="relative backdrop-blur-2xl bg-white/[0.02] rounded-2xl border border-white/[0.05] shadow-2xl"
+                        className="relative backdrop-blur-2xl bg-white/[0.03] rounded-2xl border border-white/10 shadow-2xl w-full"
                         initial={{ scale: 0.98 }}
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.1 }}
@@ -403,7 +397,7 @@ export default function ChatPage() {
                             )}
                         </AnimatePresence>
 
-                        <div className="p-4 border-t border-white/[0.05] flex items-center justify-between gap-4">
+                        <div className="p-4 border-t border-white/10 flex items-center justify-between gap-4">
                             <div className="flex items-center gap-3">
                                 <motion.button
                                     type="button"
@@ -459,7 +453,7 @@ export default function ChatPage() {
                                 key={suggestion.prefix}
                                 type="button"
                                 onClick={() => selectCommandSuggestion(index)}
-                                className="flex items-center gap-2 px-3 py-2 bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.05] rounded-lg text-sm text-white/60 hover:text-white/90 transition-all"
+                                className="flex items-center gap-2 px-3 py-2 bg-white/[0.02] hover:bg-white/[0.05] border border-white/10 rounded-lg text-sm text-white/60 hover:text-white/90 transition-all"
                             >
                                 {suggestion.icon}
                                 <span>{suggestion.label}</span>
@@ -472,13 +466,13 @@ export default function ChatPage() {
             <AnimatePresence>
                 {isTyping && (
                     <motion.div
-                        className="fixed bottom-8 left-1/2 transform -translate-x-1/2 backdrop-blur-2xl bg-white/[0.02] rounded-full px-4 py-2 shadow-lg border border-white/[0.05]"
+                        className="fixed bottom-8 left-1/2 transform -translate-x-1/2 backdrop-blur-2xl bg-white/[0.05] rounded-full px-4 py-2 shadow-lg border border-white/10"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
                     >
                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-7 rounded-full bg-white/[0.05] flex items-center justify-center text-center">
+                            <div className="w-8 h-7 rounded-full bg-white/[0.1] flex items-center justify-center text-center">
                                 <span className="text-xs font-medium text-white/90 mb-0.5">zap</span>
                             </div>
                             <div className="flex items-center gap-2 text-sm text-white/70">
@@ -492,7 +486,7 @@ export default function ChatPage() {
 
             {inputFocused && (
                 <motion.div
-                    className="fixed w-[50rem] h-[50rem] rounded-full pointer-events-none z-0 opacity-[0.02] bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 blur-[96px]"
+                    className="fixed w-[50rem] h-[50rem] rounded-full pointer-events-none z-0 opacity-[0.03] bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 blur-[96px]"
                     animate={{
                         x: mousePosition.x - 400,
                         y: mousePosition.y - 400,
@@ -511,7 +505,7 @@ export default function ChatPage() {
 
 function TypingDots() {
     return (
-        <div className="w-full min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center bg-transparent text-white p-4 sm:p-6 relative">
+        <div className="flex items-center ml-1">
             {[1, 2, 3].map((dot) => (
                 <motion.div
                     key={dot}
