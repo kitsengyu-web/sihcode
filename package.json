@@ -24,7 +24,8 @@
     "three": "^0.170.0",
     "postprocessing": "^6.36.0",
     "framer-motion": "^11.0.0",
-    "@types/three": "^0.170.0"
+    "@types/three": "^0.170.0",
+    "next-auth": "^4.24.11"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
