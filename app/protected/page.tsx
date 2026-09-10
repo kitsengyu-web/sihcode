@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <main className="relative min-h-screen w-full flex flex-col items-center overflow-hidden bg-black text-white">
       {/* Background Interactive PixelBlast */}
-      <PixelBlastBackground />
+      
 
       {/* Hidden/Fallback Auth Verification */}
       {!hasEnvVars && (
