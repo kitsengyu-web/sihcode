@@ -3,7 +3,7 @@
 import React from "react";
 import { useSession, signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
-import { ClaudeChatInput } from "./chat";
+import { ClaudeChatInput } from "@/components/chat";
 import { LogOut, User } from "lucide-react";
 
 export default function ProtectedChatPage() {
