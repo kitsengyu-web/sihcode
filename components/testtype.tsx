@@ -1,6 +1,14 @@
 'use client';
 
-import { type ElementType, useEffect, useRef, useState, createElement, useMemo, useCallback } from 'react';
+import {
+  type ElementType,
+  useEffect,
+  useRef,
+  useState,
+  createElement,
+  useMemo,
+  useCallback
+} from 'react';
 import { gsap } from 'gsap';
 
 interface TextTypeProps {
@@ -85,7 +93,9 @@ const TextType = ({
   }, [startOnVisible]);
 
   useEffect(() => {
-    if (showCursor && cursorRef.current) {
+    if (!showCursor || !cursorRef.current) return;
+
+    const ctx = gsap.context(() => {
       gsap.set(cursorRef.current, { opacity: 1 });
       gsap.to(cursorRef.current, {
         opacity: 0,
@@ -94,7 +104,9 @@ const TextType = ({
         yoyo: true,
         ease: 'power2.inOut'
       });
-    }
+    }, cursorRef);
+
+    return () => ctx.revert();
   }, [showCursor, cursorBlinkDuration]);
 
   useEffect(() => {
@@ -132,7 +144,7 @@ const TextType = ({
               setDisplayedText(prev => prev + processedText[currentCharIndex]);
               setCurrentCharIndex(prev => prev + 1);
             },
-            variableSpeed ? getRandomSpeed() : typingSpeed()
+            variableSpeed ? getRandomSpeed() : typingSpeed
           );
         } else if (textArray.length >= 1) {
           if (!loop && currentTextIndex === textArray.length - 1) return;
@@ -189,6 +201,10 @@ const TextType = ({
         {cursorCharacter}
       </span>
     )
+  );
+};
+
+export default TextType;
   );
 };
 
