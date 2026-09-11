@@ -6,6 +6,7 @@ import { PixelBlastBackground } from "@/components/pixel-blast-wrapper";
 import { HeroSection } from "@/components/hold";
 import TextType from "@/components/testtype";
 import { hasEnvVars } from "@/lib/utils";
+import RippleGrid from '@/components/secback';
 
 const PramaanLogoIcon = () => (
   <svg
@@ -56,6 +57,22 @@ export default async function Home() {
 
         {/* Hero Interactive Text Section */}
         <HeroSection />
+        <div style={{position: 'relative', height: '500px', overflow: 'hidden'}}>
+  <RippleGrid
+    enableRainbow={false}
+    gridColor="#5227FF"
+    rippleIntensity={0.05}
+    gridSize={10}
+    gridThickness={15}
+    mouseInteraction
+    mouseInteractionRadius={0.8}
+    opacity={1}
+    fadeDistance={1.5}
+    vignetteStrength={2}
+    glowIntensity={0.1}
+    gridRotation={0}
+/>
+</div>
 
         {/* Bottom Section containing TextType */}
         <footer className="w-full py-12 px-6 border-t border-zinc-800/40 bg-black/70 backdrop-blur-md text-center">
@@ -75,6 +92,7 @@ export default async function Home() {
               cursorCharacter="▋"
               cursorClassName="text-amber-400 font-bold"
             />
+            
             <p className="text-xs text-zinc-600 mt-2">
               © 2026 Pramaan AI
             </p>
