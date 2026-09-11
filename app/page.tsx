@@ -3,8 +3,10 @@ import Link from "next/link";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { PixelBlastBackground } from "@/components/pixel-blast-wrapper";
-import { HeroSection } from "@/components/hold";
+import { HeroSection } from "@/components/hero-section";
+import TextType from "@/components/testtype";
 import { hasEnvVars } from "@/lib/utils";
+
 const PramaanLogoIcon = () => (
   <svg
     viewBox="0 0 200 200"
@@ -17,15 +19,16 @@ const PramaanLogoIcon = () => (
 
 export default async function Home() {
   return (
-    <main className="relative min-h-screen flex flex-col items-center overflow-hidden bg-black text-white">
-      {/* Background Interactive PixelBlast */}
+    <main className="relative min-h-screen flex flex-col justify-between items-center overflow-hidden bg-black text-white">
+      {/* Background Canvas Layer */}
       <PixelBlastBackground />
 
-      {/* Foreground Navigation Bar */}
-      <div className="relative z-10 w-full flex flex-col items-center">
+      {/* Foreground Content Container (Layered above background) */}
+      <div className="relative z-10 w-full flex flex-col min-h-screen justify-between items-center">
+        {/* Navigation Bar */}
         <nav className="w-full flex justify-center border-b border-zinc-800/50 h-16 bg-black/40 backdrop-blur-md">
           <div className="w-full max-w-7xl flex justify-between items-center p-3 px-4 sm:px-6 text-sm text-zinc-100">
-            {/* Left: Pramaan Logo */}
+            {/* Left: Logo */}
             <Link
               href="/"
               className="flex items-center gap-2.5 transition-opacity hover:opacity-90"
@@ -50,10 +53,34 @@ export default async function Home() {
             </div>
           </div>
         </nav>
-      </div>
 
-      {/* Interactive Proximity Text */}
-      <HeroSection />
+        {/* Hero Interactive Text Section */}
+        <HeroSection />
+
+        {/* Bottom Section containing TextType */}
+        <footer className="w-full py-12 px-6 border-t border-zinc-800/40 bg-black/70 backdrop-blur-md text-center">
+          <div className="max-w-4xl mx-auto flex flex-col items-center justify-center gap-3">
+            <TextType
+              text={[
+                "Empowering intelligent workflows with Pramaan AI.",
+                "Deep reasoning, clean interactions, and modern design.",
+                "Start building your next conversation today."
+              ]}
+              typingSpeed={45}
+              deletingSpeed={25}
+              pauseDuration={2200}
+              loop={true}
+              startOnVisible={true}
+              className="text-base md:text-lg font-medium text-zinc-300"
+              cursorCharacter="▋"
+              cursorClassName="text-amber-400 font-bold"
+            />
+            <p className="text-xs text-zinc-600 mt-2">
+              © {new Date().getFullYear()} Pramaan AI Inc. All rights reserved.
+            </p>
+          </div>
+        </footer>
+      </div>
     </main>
   );
 }
