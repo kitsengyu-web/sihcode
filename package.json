@@ -27,6 +27,7 @@
     "@types/three": "^0.170.0",
     "next-auth": "^4.24.11",
     "gsap": "^3.12.7",
+    "ogl": "^1.0.11",
     "motion": "^12.4.7"
   },
   "devDependencies": {
