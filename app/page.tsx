@@ -5,7 +5,6 @@ import { AuthButton } from "@/components/auth-button";
 import { PixelBlastBackground } from "@/components/pixel-blast-wrapper";
 import { HeroSection } from "@/components/hold";
 import { hasEnvVars } from "@/lib/utils";
-
 const PramaanLogoIcon = () => (
   <svg
     viewBox="0 0 200 200"
