@@ -3,7 +3,7 @@ import Link from "next/link";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { PixelBlastBackground } from "@/components/pixel-blast-wrapper";
-import { HeroSection } from "@/components/hero-section";
+import { HeroSection } from "@/components/hold";
 import TextType from "@/components/testtype";
 import { hasEnvVars } from "@/lib/utils";
 
