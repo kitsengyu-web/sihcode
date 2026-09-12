@@ -8,7 +8,7 @@ import TextType from "@/components/testtype";
 import { hasEnvVars } from "@/lib/utils";
 import RippleGrid from "@/components/secback";
 import CardSwap, { Card } from "@/components/cardswap";
-import { Stats2 } from "@/components/stat";
+import { Stats2 } from "@/components/stats";
 
 const PramaanLogoIcon = () => (
   <svg
