@@ -12,7 +12,7 @@ export function PixelBlastBackground() {
       <PixelBlast
         variant="square"
         pixelSize={4}
-        color="#B497CF"
+        color="#8A8A8A"
         patternScale={2}
         patternDensity={1}
         pixelSizeJitter={0}
