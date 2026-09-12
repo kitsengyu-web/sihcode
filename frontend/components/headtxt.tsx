@@ -52,6 +52,30 @@ function useMousePositionRef(containerRef: MutableRefObject<HTMLElement | null>)
   return positionRef;
 }
 
+// Parses '#rrggbb' or 'rgb(r,g,b)' into an [r,g,b] tuple
+function parseColor(color: string): [number, number, number] {
+  if (color.startsWith('#')) {
+    let hex = color.slice(1);
+    if (hex.length === 3) {
+      hex = hex.split('').map(c => c + c).join('');
+    }
+    const num = parseInt(hex, 16);
+    return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+  }
+  const match = color.match(/\d+/g);
+  if (match && match.length >= 3) {
+    return [parseInt(match[0], 10), parseInt(match[1], 10), parseInt(match[2], 10)];
+  }
+  return [255, 255, 255];
+}
+
+function interpolateColor(from: [number, number, number], to: [number, number, number], t: number): string {
+  const r = Math.round(from[0] + (to[0] - from[0]) * t);
+  const g = Math.round(from[1] + (to[1] - from[1]) * t);
+  const b = Math.round(from[2] + (to[2] - from[2]) * t);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
 interface VariableProximityProps extends HTMLAttributes<HTMLSpanElement> {
   label: string;
   fromFontVariationSettings: string;
@@ -62,6 +86,10 @@ interface VariableProximityProps extends HTMLAttributes<HTMLSpanElement> {
   className?: string;
   onClick?: () => void;
   style?: CSSProperties;
+  /** Base text color when the cursor is far from a letter. Defaults to inherited color if omitted. */
+  fromColor?: string;
+  /** Text color a letter animates toward as the cursor gets close. */
+  toColor?: string;
 }
 
 const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((props, ref) => {
@@ -75,6 +103,8 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
     className = '',
     onClick,
     style,
+    fromColor,
+    toColor = '#c4b5fd', // soft purple, matches the ripple-grid accent by default
     ...restProps
   } = props;
 
@@ -104,6 +134,9 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
       toValue: toSettings.get(axis) ?? fromValue
     }));
   }, [fromFontVariationSettings, toFontVariationSettings]);
+
+  const fromColorRgb = useMemo(() => (fromColor ? parseColor(fromColor) : null), [fromColor]);
+  const toColorRgb = useMemo(() => parseColor(toColor), [toColor]);
 
   const calculateDistance = (x1: number, y1: number, x2: number, y2: number) =>
     Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
@@ -146,10 +179,12 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
 
       if (distance >= radius) {
         letterRef.style.fontVariationSettings = fromFontVariationSettings;
+        letterRef.style.color = fromColor ?? '';
         return;
       }
 
       const falloffValue = calculateFalloff(distance);
+
       const newSettings = parsedSettings
         .map(({ axis, fromValue, toValue }) => {
           const interpolatedValue = fromValue + (toValue - fromValue) * falloffValue;
@@ -159,6 +194,9 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>((p
 
       interpolatedSettingsRef.current[index] = newSettings;
       letterRef.style.fontVariationSettings = newSettings;
+
+      const baseRgb = fromColorRgb ?? [255, 255, 255];
+      letterRef.style.color = interpolateColor(baseRgb, toColorRgb, falloffValue);
     });
   });
 
