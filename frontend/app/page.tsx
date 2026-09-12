@@ -8,6 +8,7 @@ import TextType from "@/components/testtype";
 import { hasEnvVars } from "@/lib/utils";
 import RippleGrid from "@/components/secback";
 import CardSwap, { Card } from "@/components/cardswap";
+import { Stats2 } from "@/components/stat";
 
 const PramaanLogoIcon = () => (
   <svg
@@ -126,6 +127,7 @@ export default async function Home() {
             cursorCharacter="▋"
             cursorClassName="text-amber-400 font-bold"
           />
+          <Stats2 />;
 
           <p className="text-xs text-zinc-600 mt-2">
             © 2026 Pramaan AI
