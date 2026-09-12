@@ -9,6 +9,7 @@ import { hasEnvVars } from "@/lib/utils";
 import RippleGrid from "@/components/secback";
 import CardSwap, { Card } from "@/components/cardswap";
 import { Stats2 } from "@/components/stats";
+
 const PramaanLogoIcon = () => (
   <svg
     viewBox="0 0 200 200"
@@ -84,10 +85,9 @@ export default async function Home() {
 
       </section>
 
-
-
+   
       {/* SECTION 3: CardSwap Feature Section (text left, cards bleeding off right edge) */}
-      <section className="relative z-20 w-full bg-black border-t border-zinc-800/40 py-24 px-6 md:px-12 overflow-hidden">
+      <section className="relative z-20 w-full bg-black border-t border-zinc-800/40 py-24 px-6 md:px-12">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           {/* Left: heading + typing subtext */}
           <div className="text-left max-w-md">
@@ -113,9 +113,9 @@ export default async function Home() {
             />
           </div>
 
-          {/* Right: card stack, allowed to bleed past the section's right edge */}
-          <div className="relative h-[280px] md:h-[340px] w-full">
-            <div className="absolute top-0 right-[-40px] md:right-[-100px] lg:right-[-140px] w-[420px] max-w-none">
+          {/* Right: card stack, given generous room so nothing clips, nudged toward the edge via flex */}
+          <div className="relative h-[420px] md:h-[480px] w-full flex items-center justify-center md:justify-end overflow-visible">
+            <div className="relative md:mr-[-20px] lg:mr-[-60px]">
               <CardSwap
                 width={340}
                 height={220}
