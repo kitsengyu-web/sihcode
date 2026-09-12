@@ -9,6 +9,7 @@ import { hasEnvVars } from "@/lib/utils";
 import RippleGrid from "@/components/secback";
 import CardSwap, { Card } from "@/components/cardswap";
 import { Stats2 } from "@/components/stats";
+import EnterpriseAIPipeline from "@/components/workflow";
 const PramaanLogoIcon = () => (
   <svg
     viewBox="0 0 200 200"
@@ -21,7 +22,7 @@ const PramaanLogoIcon = () => (
 
 export default async function Home() {
   return (
-    <main className="w-full bg-black text-white flex flex-col">
+    <main className="w-full bg-black text-white flex flex-col overflow-x-hidden">
       {/* SECTION 1: PixelBlast Hero Section */}
       <section className="relative min-h-screen w-full flex flex-col justify-between items-center overflow-hidden">
         {/* PixelBlast is scoped solely to this hero section */}
@@ -85,7 +86,9 @@ export default async function Home() {
       </section>
 
       {/* SECTION 2.5: Enterprise AI Pipeline Visualization */}
-      
+      <section className="relative w-full bg-black border-t border-zinc-800/50 py-20 px-6 z-20 flex items-center justify-center">
+        <EnterpriseAIPipeline />
+      </section>
 
       {/* SECTION 3: Footer */}
       <footer className="relative z-20 w-full py-12 px-6 border-t border-zinc-800/40 bg-black text-center">
@@ -105,34 +108,36 @@ export default async function Home() {
             cursorCharacter="▋"
             cursorClassName="text-amber-400 font-bold"
           />
-          <CardSwap
-          width={340}
-          height={220}
-          cardDistance={50}
-          verticalDistance={55}
-          delay={4000}
-          pauseOnHover={true}
-        >
-          <Card customClass="p-6 flex flex-col justify-between">
-            <h3 className="text-lg font-semibold text-white">Semantic Matching</h3>
-            <p className="text-sm text-zinc-400">
-              Finds the right Indian Standard by meaning, not keywords.
-            </p>
-          </Card>
-          <Card customClass="p-6 flex flex-col justify-between">
-            <h3 className="text-lg font-semibold text-white">Allied Standards</h3>
-            <p className="text-sm text-zinc-400">
-              Surfaces normative, safety, and test-method references automatically.
-            </p>
-          </Card>
-          <Card customClass="p-6 flex flex-col justify-between">
-            <h3 className="text-lg font-semibold text-white">Certification Info</h3>
-            <p className="text-sm text-zinc-400">
-              Flags BIS, CRS, and Hallmarking requirements up front.
-            </p>
-          </Card>
-        </CardSwap>
-          <Stats2 />;
+          <div className="relative w-full max-w-[420px] h-[320px] mx-auto flex items-center justify-center">
+            <CardSwap
+              width={340}
+              height={220}
+              cardDistance={50}
+              verticalDistance={55}
+              delay={4000}
+              pauseOnHover={true}
+            >
+              <Card customClass="p-6 flex flex-col justify-between">
+                <h3 className="text-lg font-semibold text-white">Semantic Matching</h3>
+                <p className="text-sm text-zinc-400">
+                  Finds the right Indian Standard by meaning, not keywords.
+                </p>
+              </Card>
+              <Card customClass="p-6 flex flex-col justify-between">
+                <h3 className="text-lg font-semibold text-white">Allied Standards</h3>
+                <p className="text-sm text-zinc-400">
+                  Surfaces normative, safety, and test-method references automatically.
+                </p>
+              </Card>
+              <Card customClass="p-6 flex flex-col justify-between">
+                <h3 className="text-lg font-semibold text-white">Certification Info</h3>
+                <p className="text-sm text-zinc-400">
+                  Flags BIS, CRS, and Hallmarking requirements up front.
+                </p>
+              </Card>
+            </CardSwap>
+          </div>
+          <Stats2 />
 
           <p className="text-xs text-zinc-600 mt-2">
             © 2026 Pramaan AI
