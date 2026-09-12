@@ -9,7 +9,6 @@ import { hasEnvVars } from "@/lib/utils";
 import RippleGrid from "@/components/secback";
 import CardSwap, { Card } from "@/components/cardswap";
 import { Stats2 } from "@/components/stats";
-
 const PramaanLogoIcon = () => (
   <svg
     viewBox="0 0 200 200"
@@ -85,54 +84,73 @@ export default async function Home() {
 
       </section>
 
-  
-      {/* SECTION 3: Footer */}
+
+
+      {/* SECTION 3: CardSwap Feature Section (text left, cards bleeding off right edge) */}
+      <section className="relative z-20 w-full bg-black border-t border-zinc-800/40 py-24 px-6 md:px-12 overflow-hidden">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+          {/* Left: heading + typing subtext */}
+          <div className="text-left max-w-md">
+            <h2 className="text-3xl md:text-4xl font-semibold text-white leading-tight mb-4">
+              Built for accuracy,
+              <br />
+              trusted for certainty
+            </h2>
+            <TextType
+              text={[
+                "Empowering intelligent workflows with Pramaan AI.",
+                "Deep reasoning, clean interactions, and modern design.",
+                "Start building your next conversation today."
+              ]}
+              typingSpeed={45}
+              deletingSpeed={25}
+              pauseDuration={2200}
+              loop={true}
+              startOnVisible={true}
+              className="text-base md:text-lg font-medium text-zinc-400"
+              cursorCharacter="▋"
+              cursorClassName="text-amber-400 font-bold"
+            />
+          </div>
+
+          {/* Right: card stack, allowed to bleed past the section's right edge */}
+          <div className="relative h-[280px] md:h-[340px] w-full">
+            <div className="absolute top-0 right-[-40px] md:right-[-100px] lg:right-[-140px] w-[420px] max-w-none">
+              <CardSwap
+                width={340}
+                height={220}
+                cardDistance={50}
+                verticalDistance={55}
+                delay={4000}
+                pauseOnHover={true}
+              >
+                <Card customClass="p-6 flex flex-col justify-between">
+                  <h3 className="text-lg font-semibold text-white">Semantic Matching</h3>
+                  <p className="text-sm text-zinc-400">
+                    Finds the right Indian Standard by meaning, not keywords.
+                  </p>
+                </Card>
+                <Card customClass="p-6 flex flex-col justify-between">
+                  <h3 className="text-lg font-semibold text-white">Allied Standards</h3>
+                  <p className="text-sm text-zinc-400">
+                    Surfaces normative, safety, and test-method references automatically.
+                  </p>
+                </Card>
+                <Card customClass="p-6 flex flex-col justify-between">
+                  <h3 className="text-lg font-semibold text-white">Certification Info</h3>
+                  <p className="text-sm text-zinc-400">
+                    Flags BIS, CRS, and Hallmarking requirements up front.
+                  </p>
+                </Card>
+              </CardSwap>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 4: Footer */}
       <footer className="relative z-20 w-full py-12 px-6 border-t border-zinc-800/40 bg-black text-center">
         <div className="max-w-4xl mx-auto flex flex-col items-center justify-center gap-3">
-          <TextType
-            text={[
-              "Empowering intelligent workflows with Pramaan AI.",
-              "Deep reasoning, clean interactions, and modern design.",
-              "Start building your next conversation today."
-            ]}
-            typingSpeed={45}
-            deletingSpeed={25}
-            pauseDuration={2200}
-            loop={true}
-            startOnVisible={true}
-            className="text-base md:text-lg font-medium text-zinc-300"
-            cursorCharacter="▋"
-            cursorClassName="text-amber-400 font-bold"
-          />
-          <div className="relative w-full max-w-[420px] h-[320px] mx-auto flex items-center justify-center">
-            <CardSwap
-              width={340}
-              height={220}
-              cardDistance={50}
-              verticalDistance={55}
-              delay={4000}
-              pauseOnHover={true}
-            >
-              <Card customClass="p-6 flex flex-col justify-between">
-                <h3 className="text-lg font-semibold text-white">Semantic Matching</h3>
-                <p className="text-sm text-zinc-400">
-                  Finds the right Indian Standard by meaning, not keywords.
-                </p>
-              </Card>
-              <Card customClass="p-6 flex flex-col justify-between">
-                <h3 className="text-lg font-semibold text-white">Allied Standards</h3>
-                <p className="text-sm text-zinc-400">
-                  Surfaces normative, safety, and test-method references automatically.
-                </p>
-              </Card>
-              <Card customClass="p-6 flex flex-col justify-between">
-                <h3 className="text-lg font-semibold text-white">Certification Info</h3>
-                <p className="text-sm text-zinc-400">
-                  Flags BIS, CRS, and Hallmarking requirements up front.
-                </p>
-              </Card>
-            </CardSwap>
-          </div>
           <Stats2 />
 
           <p className="text-xs text-zinc-600 mt-2">
