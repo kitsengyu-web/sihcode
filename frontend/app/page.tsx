@@ -85,11 +85,7 @@ export default async function Home() {
 
       </section>
 
-      {/* SECTION 2.5: Enterprise AI Pipeline Visualization */}
-      <section className="relative w-full bg-black border-t border-zinc-800/50 py-20 px-6 z-20 flex items-center justify-center">
-        <EnterpriseAIPipeline />
-      </section>
-
+  
       {/* SECTION 3: Footer */}
       <footer className="relative z-20 w-full py-12 px-6 border-t border-zinc-800/40 bg-black text-center">
         <div className="max-w-4xl mx-auto flex flex-col items-center justify-center gap-3">
