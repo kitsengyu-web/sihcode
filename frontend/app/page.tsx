@@ -62,33 +62,7 @@ export default async function Home() {
         </div>
 
         {/* Decorative stacked-card accent, anchored to the hero section's corner */}
-        <CardSwap
-          width={340}
-          height={220}
-          cardDistance={50}
-          verticalDistance={55}
-          delay={4000}
-          pauseOnHover={true}
-        >
-          <Card customClass="p-6 flex flex-col justify-between">
-            <h3 className="text-lg font-semibold text-white">Semantic Matching</h3>
-            <p className="text-sm text-zinc-400">
-              Finds the right Indian Standard by meaning, not keywords.
-            </p>
-          </Card>
-          <Card customClass="p-6 flex flex-col justify-between">
-            <h3 className="text-lg font-semibold text-white">Allied Standards</h3>
-            <p className="text-sm text-zinc-400">
-              Surfaces normative, safety, and test-method references automatically.
-            </p>
-          </Card>
-          <Card customClass="p-6 flex flex-col justify-between">
-            <h3 className="text-lg font-semibold text-white">Certification Info</h3>
-            <p className="text-sm text-zinc-400">
-              Flags BIS, CRS, and Hallmarking requirements up front.
-            </p>
-          </Card>
-        </CardSwap>
+        
       </section>
 
       {/* SECTION 2: RippleGrid Section (Appears cleanly below PixelBlast) */}
@@ -127,6 +101,33 @@ export default async function Home() {
             cursorCharacter="▋"
             cursorClassName="text-amber-400 font-bold"
           />
+          <CardSwap
+          width={340}
+          height={220}
+          cardDistance={50}
+          verticalDistance={55}
+          delay={4000}
+          pauseOnHover={true}
+        >
+          <Card customClass="p-6 flex flex-col justify-between">
+            <h3 className="text-lg font-semibold text-white">Semantic Matching</h3>
+            <p className="text-sm text-zinc-400">
+              Finds the right Indian Standard by meaning, not keywords.
+            </p>
+          </Card>
+          <Card customClass="p-6 flex flex-col justify-between">
+            <h3 className="text-lg font-semibold text-white">Allied Standards</h3>
+            <p className="text-sm text-zinc-400">
+              Surfaces normative, safety, and test-method references automatically.
+            </p>
+          </Card>
+          <Card customClass="p-6 flex flex-col justify-between">
+            <h3 className="text-lg font-semibold text-white">Certification Info</h3>
+            <p className="text-sm text-zinc-400">
+              Flags BIS, CRS, and Hallmarking requirements up front.
+            </p>
+          </Card>
+        </CardSwap>
           <Stats2 />;
 
           <p className="text-xs text-zinc-600 mt-2">
