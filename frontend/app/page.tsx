@@ -80,11 +80,11 @@ export default async function Home() {
           vignetteStrength={2}
           glowIntensity={0.1}
           gridRotation={0}
-        >
+        />
         <div className="flex min-h-[400px] w-full items-center justify-center bg-black p-8">
       <EnterpriseAIPipeline />
     </div>
-          </RippleGrid>
+          
 
       </section>
 
