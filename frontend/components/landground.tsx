@@ -599,7 +599,7 @@ const PixelBlast: React.FC = ({
           if (touch) touch.update();
           composer.passes.forEach(p => {
             const pass = p as unknown as {
-              effects?: Array }>;
+              effects?: Array ;
             };
             if (pass.effects) {
               pass.effects.forEach(eff => {
