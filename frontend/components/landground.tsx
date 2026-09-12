@@ -612,7 +612,6 @@ const PixelBlast: React.FC = ({
         } else renderer.render(scene, camera);
         raf = requestAnimationFrame(animate);
       };
-      raf = requestAnimationFrame(animate);
       threeRef.current = {
         renderer,
         scene,
