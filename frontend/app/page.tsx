@@ -9,7 +9,7 @@ import { hasEnvVars } from "@/lib/utils";
 import RippleGrid from "@/components/secback";
 import CardSwap, { Card } from "@/components/cardswap";
 import { Stats2 } from "@/components/stats";
-import EnterpriseAIPipeline from "@/components/workflow";
+
 const PramaanLogoIcon = () => (
   <svg
     viewBox="0 0 200 200"
