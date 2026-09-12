@@ -1,3 +1,5 @@
+"use client";
+
 import { Effect, EffectComposer, EffectPass, RenderPass } from 'postprocessing';
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
@@ -83,12 +85,12 @@ const createTouchTexture = (): TouchTexture => {
     if (p.age < maxAge * 0.3) intensity = easeOutSine(p.age / (maxAge * 0.3));
     else intensity = easeOutQuad(1 - (p.age - maxAge * 0.3) / (maxAge * 0.7)) || 0;
     intensity *= p.force;
-    const color = `${((p.vx + 1) / 2) * 255}, ${((p.vy + 1) / 2) * 255}, ${intensity * 255}`;
+    const color = `\({((p.vx + 1) / 2) * 255},\){((p.vy + 1) / 2) * 255}, ${intensity * 255}`;
     const offset = size * 5;
     ctx.shadowOffsetX = offset;
     ctx.shadowOffsetY = offset;
     ctx.shadowBlur = radius;
-    ctx.shadowColor = `rgba(${color},${0.22 * intensity})`;
+    ctx.shadowColor = `rgba(\({color},\){0.22 * intensity})`;
     ctx.beginPath();
     ctx.fillStyle = 'rgba(255,0,0,1)';
     ctx.arc(pos.x - offset, pos.y - offset, radius, 0, Math.PI * 2);
@@ -160,7 +162,7 @@ const createLiquidEffect = (texture: THREE.Texture, opts?: { strength?: number; 
     }
     `;
   return new Effect('LiquidEffect', fragment, {
-    uniforms: new Map<string, THREE.Uniform>([
+    uniforms: new Map([
       ['uTexture', new THREE.Uniform(texture)],
       ['uStrength', new THREE.Uniform(opts?.strength ?? 0.025)],
       ['uTime', new THREE.Uniform(0)],
@@ -169,7 +171,7 @@ const createLiquidEffect = (texture: THREE.Texture, opts?: { strength?: number; 
   });
 };
 
-const SHAPE_MAP: Record<PixelBlastVariant, number> = {
+const SHAPE_MAP: Record = {
   square: 0,
   circle: 1,
   triangle: 2,
@@ -250,7 +252,7 @@ float fbm2(vec2 uv, float t){
   float freq = 1.0;
   float sum = 1.0;
   for (int i = 0; i < FBM_OCTAVES; ++i){
-    sum  += amp * vnoise(p * freq);
+    sum   += amp * vnoise(p * freq);
     freq *= FBM_LACUNARITY;
     amp  *= FBM_GAIN;
   }
@@ -337,7 +339,6 @@ void main(){
 
   vec3 color = uColor;
 
-  // sRGB gamma correction - convert linear to sRGB for accurate color output
   vec3 srgbColor = mix(
     color * 12.92,
     1.055 * pow(color, vec3(1.0 / 2.4)) - 0.055,
@@ -350,7 +351,7 @@ void main(){
 
 const MAX_CLICKS = 10;
 
-const PixelBlast: React.FC<PixelBlastProps> = ({
+const PixelBlast: React.FC = ({
   variant = 'square',
   pixelSize = 3,
   color = '#B497CF',
@@ -374,7 +375,7 @@ const PixelBlast: React.FC<PixelBlastProps> = ({
   edgeFade = 0.5,
   noiseAmount = 0
 }) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef(null);
   const visibilityRef = useRef({ visible: true });
   const speedRef = useRef(speed);
 
@@ -404,13 +405,14 @@ const PixelBlast: React.FC<PixelBlastProps> = ({
     };
     resizeObserver?: ResizeObserver;
     raf?: number;
-    quad?: THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial>;
+    quad?: THREE.Mesh;
     timeOffset?: number;
     composer?: EffectComposer;
-    touch?: ReturnType<typeof createTouchTexture>;
+    touch?: ReturnType;
     liquidEffect?: Effect;
   } | null>(null);
-  const prevConfigRef = useRef<ReinitConfig | null>(null);
+  const prevConfigRef = useRef(null);
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -508,7 +510,7 @@ const PixelBlast: React.FC<PixelBlastProps> = ({
       };
       const timeOffset = randomFloat() * 1000;
       let composer: EffectComposer | undefined;
-      let touch: ReturnType<typeof createTouchTexture> | undefined;
+      let touch: ReturnType | undefined;
       let liquidEffect: Effect | undefined;
       if (liquid) {
         touch = createTouchTexture();
@@ -533,7 +535,7 @@ const PixelBlast: React.FC<PixelBlastProps> = ({
           'NoiseEffect',
           `uniform float uTime; uniform float uAmount; float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453);} void mainUv(inout vec2 uv){} void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){ float n=hash(floor(uv*vec2(1920.0,1080.0))+floor(uTime*60.0)); float g=(n-0.5)*uAmount; outputColor=inputColor+vec4(vec3(g),0.0);} `,
           {
-            uniforms: new Map<string, THREE.Uniform>([
+            uniforms: new Map([
               ['uTime', new THREE.Uniform(0)],
               ['uAmount', new THREE.Uniform(noiseAmount)]
             ])
@@ -589,14 +591,14 @@ const PixelBlast: React.FC<PixelBlastProps> = ({
         }
         uniforms.uTime.value = timeOffset + clock.getElapsedTime() * speedRef.current;
         if (liquidEffect) {
-          const liqEffect = liquidEffect as Effect & { uniforms: Map<string, THREE.Uniform> };
+          const liqEffect = liquidEffect as Effect & { uniforms: Map };
           const timeUniform = liqEffect.uniforms.get('uTime');
           if (timeUniform) timeUniform.value = uniforms.uTime.value;
         }
         if (composer) {
           if (touch) touch.update();
           composer.passes.forEach(p => {
-            const pass = p as { effects?: Array<Effect & { uniforms: Map<string, THREE.Uniform> }> };
+            const pass = p as { effects?: Array }> };
             if (pass.effects) {
               pass.effects.forEach(eff => {
                 const timeUniform = eff.uniforms?.get('uTime');
@@ -641,7 +643,7 @@ const PixelBlast: React.FC<PixelBlastProps> = ({
       if (transparent) t.renderer.setClearAlpha(0);
       else t.renderer.setClearColor(0x000000, 1);
       if (t.liquidEffect) {
-        const liqEffect = t.liquidEffect as Effect & { uniforms: Map<string, THREE.Uniform> };
+        const liqEffect = t.liquidEffect as Effect & { uniforms: Map };
         const uStrength = liqEffect.uniforms.get('uStrength');
         if (uStrength) uStrength.value = liquidStrength;
         const uFreq = liqEffect.uniforms.get('uFreq');
@@ -688,13 +690,3 @@ const PixelBlast: React.FC<PixelBlastProps> = ({
   ]);
 
   return (
-    <div
-      ref={containerRef}
-      className={`w-full h-full relative overflow-hidden ${className ?? ''}`}
-      style={style}
-      aria-label="PixelBlast interactive background"
-    />
-  );
-};
-
-export default PixelBlast;
