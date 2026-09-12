@@ -9,7 +9,7 @@ import { hasEnvVars } from "@/lib/utils";
 import RippleGrid from "@/components/secback";
 import CardSwap, { Card } from "@/components/cardswap";
 import { Stats2 } from "@/components/stats";
-
+import EnterpriseAIPipeline from "@/components/workflow";
 const PramaanLogoIcon = () => (
   <svg
     viewBox="0 0 200 200"
@@ -80,7 +80,12 @@ export default async function Home() {
           vignetteStrength={2}
           glowIntensity={0.1}
           gridRotation={0}
-        />
+        >
+        <div className="flex min-h-[400px] w-full items-center justify-center bg-black p-8">
+      <EnterpriseAIPipeline />
+    </div>
+          </RippleGrid>
+
       </section>
 
       {/* SECTION 3: Footer */}
