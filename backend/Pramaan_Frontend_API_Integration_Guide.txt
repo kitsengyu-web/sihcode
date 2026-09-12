@@ -1,0 +1,479 @@
+Pramaan — Frontend API Integration Guide
+
+SIH 2026 • BIS Indian Standards Recommendation Engine
+
+1. Purpose
+
+This document explains how the Next.js frontend communicates with the
+Pramaan FastAPI backend, what happens after a user submits a
+requirement, which endpoint to call, the request format, the response
+structure, and how frontend developers should handle loading and errors.
+
+2. System Flow
+
+1. User enters a procurement / technical requirement in the Next.js UI.
+
+2. Frontend sends the requirement to POST /recommend.
+
+3. FastAPI validates the request.
+
+4. Pramaan runs BIS semantic retrieval using BGE embeddings and
+ChromaDB.
+
+5. The top candidates are reranked using the Cross-Encoder and BIS-aware
+ranking logic.
+
+6. Relationship metadata is expanded and filtered.
+
+7. A grounded RAG context is constructed from the retrieved BIS records.
+
+8. Gemini classifies relevance and generates explanations using only the
+supplied BIS context.
+
+9. Pydantic validates the structured Gemini response.
+
+10. FastAPI returns the recommendation JSON plus the retrieved candidate
+standards.
+
+11. Frontend renders recommendations, explanations,
+certification/testing information, relationships, and notes.
+
+Important: the frontend does not call Gemini, ChromaDB, BGE, the
+Cross-Encoder, or BIS data services directly. The frontend communicates
+only with the Pramaan API.
+
+3. Backend URL
+
+Local development:
+
+-   http://127.0.0.1:8000
+
+-   Alternative:
+
+-   http://localhost:8000
+
+Swagger API documentation:
+
+-   http://127.0.0.1:8000/docs
+
+4. API Endpoints
+
+  ------------------------------------------------------------------------------
+  Method            Endpoint          Purpose           Frontend Use
+  ----------------- ----------------- ----------------- ------------------------
+  GET               /                 Backend           Optional
+                                      identity/status   
+
+  GET               /health           Health + Gemini   Useful for
+                                      initialization    development/monitoring
+                                      status            
+
+  POST              /recommend        Generate BIS      Main application
+                                      recommendations   endpoint
+
+  GET               /docs             FastAPI Swagger   Developer testing only
+                                      UI                
+  ------------------------------------------------------------------------------
+
+5. Main Endpoint: POST /recommend
+
+Content-Type: application/json
+
+Request body:
+
+{
+"query": "500 KVA outdoor distribution transformer",
+"retrieval_top_k": 30,
+"final_top_k": 5
+}
+
+6. Request Fields
+
+  -----------------------------------------------------------------------
+  Field             Type              Required          Description
+  ----------------- ----------------- ----------------- -----------------
+  query             string            Yes               User's
+                                                        procurement or
+                                                        technical
+                                                        requirement.
+
+  retrieval_top_k   integer           No                Number of BIS
+                                                        candidates
+                                                        retrieved before
+                                                        reranking.
+                                                        Default: 30.
+                                                        Allowed: 1–100.
+
+  final_top_k       integer           No                Number of final
+                                                        retrieved
+                                                        candidates
+                                                        supplied to the
+                                                        RAG pipeline.
+                                                        Default: 5.
+                                                        Allowed: 1–20.
+  -----------------------------------------------------------------------
+
+7. Recommended Frontend Call
+
+Example using fetch:
+
+const response = await fetch("http://127.0.0.1:8000/recommend", {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify({
+query: userQuery,
+retrieval_top_k: 30,
+final_top_k: 5,
+}),
+});
+if (!response.ok) {
+const error = await response.json();
+throw new Error(error.detail || "Recommendation request failed");
+}
+const data = await response.json();
+
+8. Response Structure
+
+The successful response contains these top-level fields:
+
+  ---------------------------------------------------------------------------
+  Field                       Type                    Purpose
+  --------------------------- ----------------------- -----------------------
+  query                       string                  Original user
+                                                      requirement.
+
+  requirement_understanding   string                  Pramaan's
+                                                      interpretation of the
+                                                      requirement.
+
+  recommendations             array                   Grounded BIS
+                                                      recommendations
+                                                      generated by Gemini.
+
+  retrieved_standards         array                   Candidates retrieved by
+                                                      the backend
+                                                      before/alongside final
+                                                      LLM recommendations.
+
+  notes                       array                   Limitations, missing
+                                                      information, or
+                                                      important warnings.
+  ---------------------------------------------------------------------------
+
+9. Recommendation Object
+
+{
+"standard_number": "IS 2185 (Part 2):1983",
+"standard_name": "Concrete masonry units - Specification",
+"relevance": "direct",
+"explanation": "Grounded explanation from the retrieved BIS context.",
+"certification": null,
+"testing": [],
+"amendments": [],
+"relationships": []
+}
+
+10. Recommendation Fields
+
+  -----------------------------------------------------------------------
+  Field             Type              Possible Values   Frontend Meaning
+  ----------------- ----------------- ----------------- -----------------
+  standard_number   string            BIS standard      Display exactly
+                                      number            as returned.
+
+  standard_name     string            BIS standard      Display exactly
+                                      title             as returned.
+
+  relevance         string            direct /          Use for badges,
+                                      specialized /     filters, or
+                                      supporting /      sections.
+                                      testing / related 
+
+  explanation       string            Text              Why Pramaan
+                                                        considers the
+                                                        standard
+                                                        relevant.
+
+  certification     string | null     Value or null     Show only when
+                                                        non-null.
+
+  testing           string[]          Array             Explicit testing
+                                                        information
+                                                        available in BIS
+                                                        context.
+
+  amendments        string[]          Array             Explicit
+                                                        amendment
+                                                        information.
+
+  relationships     string[]          Array             Explicit BIS
+                                                        relationship
+                                                        information.
+  -----------------------------------------------------------------------
+
+11. Relevance Classification
+
+-   direct: Directly covers the requested product, requirement, or
+    activity.
+
+-   specialized: Covers a specific subtype, application, material, or
+    use case related to the query.
+
+-   supporting: Supports the requirement but is not the primary
+    product/activity standard.
+
+-   testing: Primarily concerns testing or test methods relevant to the
+    requirement.
+
+-   related: Related through BIS relationship metadata but does not
+    directly satisfy the requirement.
+
+12. Important Grounding Rule
+
+Pramaan is designed to be grounded in the retrieved BIS dataset. The
+backend instructs Gemini not to invent IS numbers, titles, certification
+requirements, testing requirements, amendments, revisions, or
+relationships. The frontend should therefore display returned data as
+authoritative application output and should not create additional
+standards or metadata on the client side.
+
+13. Example Successful Response
+
+{
+"query": "concrete blocks",
+"requirement_understanding": "The user is looking for Indian Standards
+relevant to concrete block requirements.",
+"recommendations": [
+{
+"standard_number": "IS 2185 (Part 2):1983",
+"standard_name": "Concrete masonry units - Specification",
+"relevance": "direct",
+"explanation": "Relevant to the concrete block requirement based on the
+retrieved BIS context.",
+"certification": null,
+"testing": [],
+"amendments": [],
+"relationships": []
+}
+],
+"retrieved_standards": [
+{
+"standard_number": "IS 2185 (Part 2):1983",
+"standard_name": "Concrete masonry units - Specification"
+}
+],
+"notes": []
+}
+
+14. Loading State
+
+Recommendation generation is not an instant local computation.
+Retrieval, reranking, RAG context construction, Gemini generation, and
+validation all happen before the final response is returned.
+
+-   Disable or protect the submit button while the request is running.
+
+-   Show a loading state such as 'Analyzing requirement...' rather than
+    immediately showing an empty result.
+
+-   Do not start multiple identical /recommend requests for one
+    submission.
+
+-   Abort stale requests if the user submits a new requirement before
+    the previous request finishes.
+
+15. Error Handling
+
+  ---------------------------------------------------------------------------
+  HTTP Status             Meaning                     Frontend Action
+  ----------------------- --------------------------- -----------------------
+  200                     Recommendation generated    Render response.
+                          successfully.               
+
+  400                     Invalid request / invalid   Show validation error
+                          input.                      to user.
+
+  404                     No relevant BIS standards   Show a clear 'No
+                          found.                      relevant standards
+                                                      found' state.
+
+  503                     LLM client is not           Show temporary
+                          initialized.                backend-unavailable
+                                                      state.
+
+  500                     Unexpected                  Show generic error and
+                          recommendation-generation   allow retry.
+                          failure.                    
+  ---------------------------------------------------------------------------
+
+FastAPI error responses use:
+
+{
+"detail": "Error description"
+}
+
+16. CORS
+
+The backend currently allows the following frontend origins:
+
+-   http://localhost:3000
+
+-   http://127.0.0.1:3000
+
+The Next.js development server can therefore run on port 3000 without a
+CORS block. If the frontend uses another origin or port, the backend
+CORS configuration must be updated.
+
+17. Recommended Next.js API Layer
+
+Do not scatter the backend URL throughout React components. Keep it in
+one API utility.
+
+const API_BASE_URL =
+process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
+export async function getRecommendations(query: string) {
+const response = await fetch(`${API_BASE_URL}/recommend`, {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify({
+query,
+retrieval_top_k: 30,
+final_top_k: 5,
+}),
+});
+const data = await response.json();
+if (!response.ok) {
+throw new Error(data.detail || "Recommendation request failed");
+}
+return data;
+}
+
+18. Environment Variable
+
+Recommended frontend .env.local:
+
+NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
+
+This keeps the frontend independent of the backend host. For deployment,
+only the environment variable needs to change if the API domain changes.
+
+19. What the Frontend Should Render
+
+-   Requirement/query entered by the user.
+
+-   Requirement understanding.
+
+-   Recommended BIS standards as cards or rows.
+
+-   Exact standard number and title.
+
+-   Relevance badge.
+
+-   Explanation.
+
+-   Certification information when available.
+
+-   Testing information when available.
+
+-   Amendments when available.
+
+-   Relationships when available.
+
+-   Notes / limitations.
+
+20. What the Frontend Should NOT Render
+
+-   BGE embedding vectors.
+
+-   ChromaDB IDs.
+
+-   Internal retrieval distances.
+
+-   Cross-encoder scores.
+
+-   Hybrid ranking scores.
+
+-   Internal model configuration.
+
+-   Gemini API key or backend environment variables.
+
+-   Raw internal prompts unless a dedicated developer/debug screen is
+    intentionally added.
+
+21. Architecture Boundary
+
+Frontend responsibility: collect the requirement, call /recommend,
+manage loading/error states, and present the structured response.
+
+Backend responsibility: BIS retrieval, embeddings, reranking,
+relationship filtering, RAG context, Gemini reasoning, grounding,
+validation, and response generation.
+
+22. Development Checklist
+
+-   Start FastAPI: uvicorn api.main:app --reload
+
+-   Verify GET /health returns healthy and llm_initialized=true.
+
+-   Open /docs and test POST /recommend.
+
+-   Create NEXT_PUBLIC_API_BASE_URL in the Next.js .env.local.
+
+-   Create one centralized API utility for /recommend.
+
+-   Connect the search/requirement form to that utility.
+
+-   Implement loading, success, 400, 404, 503, and 500 states.
+
+-   Render recommendations from the returned JSON.
+
+-   Do not hardcode BIS recommendations in the frontend.
+
+23. Current Backend Status
+
+-   BIS data extraction: complete
+
+-   Unified BIS corpus: complete
+
+-   BGE semantic retrieval: complete
+
+-   ChromaDB: complete
+
+-   Cross-encoder reranking: complete
+
+-   Hybrid ranking: complete
+
+-   Relationship expansion/filtering: complete
+
+-   RAG context: complete
+
+-   Gemini integration: complete
+
+-   Structured JSON: complete
+
+-   Pydantic validation: complete
+
+-   FastAPI /recommend: working
+
+-   FastAPI lifespan/resource lifecycle: implemented
+
+-   Next.js integration: frontend team's next integration step
+
+24. Quick Reference
+
+Endpoint: POST http://127.0.0.1:8000/recommend
+
+Body: {"query":"your requirement","retrieval_top_k":30,"final_top_k":5}
+
+Success: HTTP 200
+
+Main response: query + requirement_understanding + recommendations +
+retrieved_standards + notes
+
+Swagger: http://127.0.0.1:8000/docs
+
+Pramaan • SIH 2026 • Frontend ↔ FastAPI Integration

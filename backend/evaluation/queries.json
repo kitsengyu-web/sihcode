@@ -1,0 +1,45 @@
+[
+  {
+    "query": "500 KVA outdoor distribution transformer",
+    "relevant_standards": [
+      "IS 1180 (Part 1)"
+    ]
+  },
+  {
+    "query": "steel reinforcement bars for concrete",
+    "relevant_standards": [
+      "IS 1786",
+      "IS 432 (Part 1)",
+      "IS 19068"
+    ]
+  },
+  {
+    "query": "automobile tyres",
+    "relevant_standards": [
+      "IS 15627",
+      "IS 15636"
+    ]
+  },
+  {
+    "query": "drinking water quality",
+    "relevant_standards": [
+      "IS 10500"
+    ]
+  },
+  {
+    "query": "solar photovoltaic modules",
+    "relevant_standards": []
+  },
+  {
+    "query": "cement concrete for construction",
+    "relevant_standards": []
+  },
+  {
+    "query": "medical oxygen cylinders",
+    "relevant_standards": []
+  },
+  {
+    "query": "personal protective equipment for industrial workers",
+    "relevant_standards": []
+  }
+]

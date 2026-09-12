@@ -1,0 +1,112 @@
+# =========================
+# Environment / Secrets
+# =========================
+
+.env
+.env.*
+!.env.example
+
+
+# =========================
+# Python
+# =========================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+*.so
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+.pytype/
+.coverage
+htmlcov/
+
+
+# =========================
+# Virtual Environments
+# =========================
+
+venv/
+.venv/
+env/
+ENV/
+
+
+# =========================
+# IDE / Editors
+# =========================
+
+.vscode/
+.idea/
+
+*.swp
+*.swo
+
+
+# =========================
+# OS
+# =========================
+
+.DS_Store
+Thumbs.db
+
+
+# =========================
+# ChromaDB
+# =========================
+
+chroma_db/
+
+
+# =========================
+# Logs
+# =========================
+
+*.log
+logs/
+
+
+# =========================
+# Temporary Files
+# =========================
+
+*.tmp
+*.temp
+*.bak
+
+
+# =========================
+# Generated Data
+# =========================
+
+data/processed/
+data/embeddings/
+data/output/
+
+
+# =========================
+# Large Data Files
+# =========================
+
+data/master/
+*.jsonl
+*.sqlite3
+*.bin
+*.pickle
+
+# =========================
+# Temp / Runner Files
+# =========================
+
+tempCodeRunnerFile.py
+
+
+# =========================
+# Jupyter
+# =========================
+
+.ipynb_checkpoints/
