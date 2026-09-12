@@ -7,7 +7,7 @@ import { HeroSection } from "@/components/hold";
 import TextType from "@/components/testtype";
 import { hasEnvVars } from "@/lib/utils";
 import RippleGrid from "@/components/secback";
-import CardSwap, { Card } from "@/components/card-swap";
+import CardSwap, { Card } from "@/components/cardswap";
 
 const PramaanLogoIcon = () => (
   <svg
