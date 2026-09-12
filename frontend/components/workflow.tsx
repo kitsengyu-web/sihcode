@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const messages = [
   'Received: "Summarize Q3 performance for stakeholder report..."',
