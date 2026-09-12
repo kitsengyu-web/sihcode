@@ -1,44 +1,25 @@
-import { NextLogo } from "./next-logo";
-import { SupabaseLogo } from "./supabase-logo";
+"use client";
 
-export function Hero() {
+import { useRef } from "react";
+import VariableProximity from "@/components/headtxt";
+
+export function HeroSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
-    <div className="flex flex-col gap-16 items-center">
-      <div className="flex gap-8 justify-center items-center">
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <SupabaseLogo />
-        </a>
-        <span className="border-l rotate-45 h-6" />
-        <a href="https://nextjs.org/" target="_blank" rel="noreferrer">
-          <NextLogo />
-        </a>
-      </div>
-      <h1 className="sr-only">Supabase and Next.js Starter Template</h1>
-      <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center">
-        The fastest way to build apps with{" "}
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Supabase
-        </a>{" "}
-        and{" "}
-        <a
-          href="https://nextjs.org/"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Next.js
-        </a>
-      </p>
-      <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
+    <div
+      ref={containerRef}
+      className="relative z-10 my-auto flex items-center justify-center p-8 text-center"
+    >
+      <VariableProximity
+        label={"The Solution for Procurement of Official Standards details are here"}
+        className="variable-proximity-demo text-4xl md:text-6xl lg:text-7xl font-extrabold cursor-pointer max-w-5xl"
+        fromFontVariationSettings="'wght' 700, 'opsz' 9"
+        toFontVariationSettings="'wght' 1000, 'opsz' 40"
+        containerRef={containerRef}
+        radius={100}
+        falloff="linear"
+      />
     </div>
   );
 }
